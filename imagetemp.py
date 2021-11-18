@@ -1,13 +1,19 @@
 import cv2
 import numpy as np
 import os
-from controller.controller import *
+#from controller.controller import *
+import winsound
 
 path = 'image'
 orb = cv2.ORB_create(nfeatures=1000)
 images = []
 className = []
 myList = os.listdir(path)
+font = cv2.FONT_HERSHEY_DUPLEX
+org = (30, 30)
+font_color = (255, 255, 255)
+thickness = 2
+font_scale = 1
 
 for cl in myList:
     imgCur = cv2.imread(f'{path}/{cl}', 0)
@@ -51,7 +57,11 @@ while True:
     img2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
     id = finID(img2, desList)
     if id != -1:
-        cv2.putText(imgOriginal, className[id], (50,50),cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255), 1)
-        doorAutomate(0)
-    cv2.imshow('img2', imgOriginal)
+        cv2.putText(imgOriginal, className[id], org, font, font_scale, font_color, thickness, cv2.LINE_AA)
+        #doorAutomate(0)
+        if className[id] == "Batik Megamendung":
+            winsound.PlaySound('sound/batikMegamendung.wav', winsound.SND_FILENAME)
+        elif className[id] == "Batik Kawung":
+            winsound.PlaySound('sound/batikKawung.wav', winsound.SND_FILENAME)
+    cv2.imshow('App', imgOriginal)
     cv2.waitKey(1)
